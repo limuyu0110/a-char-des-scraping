@@ -1,2 +1,13 @@
 # a-char-des-scraping
-maybe useful in FINAL Project of PKU course: Digital Image Processing 
+
+Serving as part of my Final Project of Digital Image Processing
+
+### Description
+
+The whole project temporarily aims at generating cartoon faces using natural language description.
+And this repo collects the dataset needed for GAN training.
+
+The source website is [getchu.com](getchu.com), which is blocked in PRC. To run this code in China,
+make sure the socks 5 proxy is set on port 1080.
+
+
