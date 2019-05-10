@@ -15,12 +15,22 @@ import re
 from utils import *
 import codecs
 import json
+from http import cookiejar
 
 logger = logging.getLogger('main.web_rel')
 
+COOKIE_FILE = './raw_data/cookie.txt'
 proxy = "http://localhost:1080"
 proxy_support = urllib.request.ProxyHandler({'http': proxy})
-opener = urllib.request.build_opener(proxy_support)
+
+cookie = cookiejar.MozillaCookieJar()
+cookie.load(COOKIE_FILE)
+cookie_support = urllib.request.HTTPCookieProcessor(cookie)
+
+# opener = urllib.request.build_opener(proxy_support, cookie_support)
+opener = urllib.request.build_opener(cookie_support)
+opener.add_handler(proxy_support)
+
 urllib.request.install_opener(opener)
 
 
@@ -38,11 +48,11 @@ def get_soup_from_url(url):
 
 def judge_soup_is_valid(url, pgsoup):
     # Blank Page
-    if not pgsoup:
+    if is_blank(pgsoup):
         logger.info(F"soup from url: {url} is blank")
         return False
 
-    if 'ゲーム' in pgsoup.title:
+    if 'ゲーム' in pgsoup.title.string:
         if_char_column = pgsoup.find(name='div', string=re.compile('キャラクター'))
         year = get_year(pgsoup)
         if not year or year < YEAR_AFTER:
@@ -52,7 +62,9 @@ def judge_soup_is_valid(url, pgsoup):
             logger.info(F"soup from url: {url} has no char column")
             return False
 
-    return True
+        return True
+
+    return False
 
 
 def get_src_and_desc(pgsoup):
@@ -73,6 +85,10 @@ def get_game_name(pgsoup):
     return pgsoup.title.string
 
 
+def is_blank(pgsoup):
+    return not bool(pgsoup.title)
+
+
 def get_year(pgsoup):
     year = pgsoup.find(id='tooltip-day')
     if year:
@@ -86,5 +102,23 @@ def process_one_url(url):
     if judge_soup_is_valid(url, pgsoup):
         L = get_src_and_desc(pgsoup)
         fn = get_game_name(pgsoup) + '.json'
+        fn = re.sub(r'[a-zA-Z*]', '', fn)
         with codecs.open(os.path.join(JSON_PATH, fn), 'w', 'utf8') as f:
             json.dump(L, f, ensure_ascii=False, indent=4)
+
+        logger.info(F"succeeded in url: {url}")
+
+
+def next_page_url_in_search(pgsoup):
+    return ROOT_URL + pgsoup.find('a', title='next page')['href']
+
+
+def urls_in_one_search_page(pgsoup):
+    tmp = list(filter(lambda x: not x.img, pgsoup.find_all('a', href=re.compile('soft.phtml'))))
+    urls = [ROOT_URL + '/' + a['href'] for a in tmp]
+    return urls
+
+
+
+
+

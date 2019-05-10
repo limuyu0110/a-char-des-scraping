@@ -11,6 +11,9 @@ import logging
 from utils import *
 from config import *
 from web_rel import process_one_url
+import codecs
+import json
+from tqdm import tqdm
 
 FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(process)d - %(processName)s - %(funcName)s - %(message)s'
 log_filename = 'logs/run.log'
@@ -35,6 +38,13 @@ def trial_one_page():
     process_one_url(url)
 
 
-if __name__ == '__main__':
-    trial_one_page()
+def seq():
+    with codecs.open(URLS_FILE, 'r') as f:
+        urls = json.load(f)
+        for url in tqdm(urls):
+            process_one_url(url)
 
+
+if __name__ == '__main__':
+    # trial_one_page()
+    seq()
