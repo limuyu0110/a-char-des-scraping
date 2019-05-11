@@ -36,5 +36,6 @@ SEARCH_URL_GAME = "http://www.getchu.com/sp/search.phtml?genre=pc_soft&search_ke
 
 # others
 YEAR_AFTER = 2010
+CHUNK_SIZE = 100
 
 

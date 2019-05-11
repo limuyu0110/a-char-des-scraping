@@ -17,7 +17,7 @@ if __name__ == "__main__":
     tmpurl = SEARCH_URL_GAME
     pgsoup = get_soup_from_url(tmpurl)
     urls = []
-    for i in tqdm(range(1600)):
+    for i in tqdm(range(1259, 1600)):
         try:
             urls.extend(urls_in_one_search_page(pgsoup))
             tmpurl = next_page_url_in_search(pgsoup)

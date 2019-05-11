@@ -102,7 +102,7 @@ def process_one_url(url):
     if judge_soup_is_valid(url, pgsoup):
         L = get_src_and_desc(pgsoup)
         fn = get_game_name(pgsoup) + '.json'
-        fn = re.sub(r'[a-zA-Z*]', '', fn)
+        fn = re.sub(r'[*\/:?"<>|]', '', fn)
         with codecs.open(os.path.join(JSON_PATH, fn), 'w', 'utf8') as f:
             json.dump(L, f, ensure_ascii=False, indent=4)
 

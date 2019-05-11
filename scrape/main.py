@@ -14,6 +14,7 @@ from web_rel import process_one_url
 import codecs
 import json
 from tqdm import tqdm
+import concurrent.futures as cf
 
 FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(process)d - %(processName)s - %(funcName)s - %(message)s'
 log_filename = 'logs/run.log'
@@ -41,8 +42,11 @@ def trial_one_page():
 def seq():
     with codecs.open(URLS_FILE, 'r') as f:
         urls = json.load(f)
-        for url in tqdm(urls):
-            process_one_url(url)
+        for i in tqdm(range(len(urls) // CHUNK_SIZE + 1)):
+            with cf.ProcessPoolExecutor(max_workers=10) as exe:
+                exe.map(process_one_url, urls[i * CHUNK_SIZE: i * CHUNK_SIZE + CHUNK_SIZE])
+        # for url in tqdm(urls):
+        #     process_one_url(url)
 
 
 if __name__ == '__main__':
