@@ -117,8 +117,3 @@ def urls_in_one_search_page(pgsoup):
     tmp = list(filter(lambda x: not x.img, pgsoup.find_all('a', href=re.compile('soft.phtml'))))
     urls = [ROOT_URL + '/' + a['href'] for a in tmp]
     return urls
-
-
-
-
-

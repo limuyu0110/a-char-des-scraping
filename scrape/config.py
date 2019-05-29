@@ -14,6 +14,7 @@ RAW_DATA_PATH = os.path.join(os.path.abspath(os.path.curdir), 'raw_data')
 JSON_PATH = os.path.join(RAW_DATA_PATH, 'jsons')
 DESC_PATH = os.path.join(RAW_DATA_PATH, 'descs')
 IMG_PATH = os.path.join(RAW_DATA_PATH, 'imgs')
+FINAL_IMG_PATH = os.path.join(RAW_DATA_PATH, 'final_imgs')
 LOG_PATH = os.path.join(os.path.abspath(os.path.curdir), 'logs')
 URLS_FILE = os.path.join(RAW_DATA_PATH, 'urls')
 COOKIE_FILE = os.path.join(RAW_DATA_PATH, 'cookie.txt')
@@ -23,6 +24,7 @@ os.makedirs(JSON_PATH, exist_ok=True)
 os.makedirs(IMG_PATH, exist_ok=True)
 os.makedirs(DESC_PATH, exist_ok=True)
 os.makedirs(LOG_PATH, exist_ok=True)
+os.makedirs(FINAL_IMG_PATH, exist_ok=True)
 
 # urls
 BASE_URL = "http://www.getchu.com/soft.phtml?id="
